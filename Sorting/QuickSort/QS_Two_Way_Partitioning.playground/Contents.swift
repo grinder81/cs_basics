@@ -19,7 +19,12 @@ func twoWayPartition(_ array: inout[Int], p: Int, r: Int) -> Int {
             array.swapAt(i, j)
         }
     }
+    // Place the array[r] in a position where
+    // everything left <= of it
+    // everything right > of it
     array.swapAt(i + 1, r)
+    
+    // Divide the array from this index
     return i + 1
 }
 /**
