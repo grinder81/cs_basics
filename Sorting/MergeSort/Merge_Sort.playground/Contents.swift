@@ -1,9 +1,14 @@
 import Foundation
 
+// Comparision sort: Yes
 // Stable: Yes. It doesn't swap equal elements
 // Inplace: No
 // Aux Space: Yes
 // Time: Avg O(NlgN)
+// Some facts: Any comparison sort can have avg O(n lg n) at best
+// due to the fact that comparison tree is a binary tree with height
+// of 2^h where is h is the height
+
 
 func merge(_ array: inout[Int], low: Int, mid: Int, high: Int) {
     let aux = Array(array)
