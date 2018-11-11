@@ -5,31 +5,31 @@ func twoWayPartition(_ array: inout[Int], p: Int, r: Int) -> Int {
     let x = array[r]
     
     // Expected pivot index
-    var i = p - 1
+    var low = p - 1
     
     // There are 4 regions maintained by this partition system
-    // array[p..i]      -> all values less than or equal to x
-    // array[i+1..j-1]  -> all values greater than x
-    // array[j..r-1]    -> all values unrestricted
-    // array[r] == x    -> the pivot element
+    // array[p..low]        = all values less than or equal to x
+    // array[low+1..high-1] = all values greater than x
+    // array[high..r-1]     = all values unrestricted
+    // array[r] == x        = the pivot element
     
-    for j in p...r-1 {
-        if array[j] <= x {
-            i += 1
-            array.swapAt(i, j)
+    for high in p...r-1 {
+        if array[high] <= x {
+            low += 1
+            array.swapAt(low, high)
         }
     }
     // Place the array[r] in a position where
     // everything left <= of it
     // everything right > of it
-    array.swapAt(i + 1, r)
+    array.swapAt(low + 1, r)
     
     // Divide the array from this index
-    return i + 1
+    return low + 1
 }
 /**
  - parameter array: Array to be sorted
- - parameter p: partition index
+ - parameter p: lower index
  - parameter r: right index
  */
 func quickSort(_ array: inout[Int], p: Int, r: Int) {
@@ -37,6 +37,7 @@ func quickSort(_ array: inout[Int], p: Int, r: Int) {
     if r >= array.count { return }
     
     if p < r {
+        // q is the partition index
         let q = twoWayPartition(&array, p: p, r: r)
         quickSort(&array, p: p, r: q - 1)
         quickSort(&array, p: q + 1, r: r)
