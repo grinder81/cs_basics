@@ -1,5 +1,10 @@
 import Foundation
 
+// Stable: Yes. It doesn't swap equal elements
+// Inplace: No
+// Aux Space: Yes
+// Time: Avg O(NlgN)
+
 func merge(_ array: inout[Int], low: Int, mid: Int, high: Int) {
     let aux = Array(array)
     var i = low
