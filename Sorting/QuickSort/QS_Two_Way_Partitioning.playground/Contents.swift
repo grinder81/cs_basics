@@ -37,6 +37,9 @@ func quickSort(_ array: inout[Int], p: Int, r: Int) {
     if r >= array.count { return }
     
     if p < r {
+        // Randomize pivot
+        let pi = Int.random(in: p..<r)
+        array.swapAt(r, pi)
         // q is the partition index
         let q = twoWayPartition(&array, p: p, r: r)
         quickSort(&array, p: p, r: q - 1)

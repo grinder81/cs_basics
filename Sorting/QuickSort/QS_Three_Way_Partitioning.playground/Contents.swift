@@ -35,6 +35,9 @@ func partition(_ array: inout[Int], p: Int, r: Int) -> (Int, Int) {
 
 func quickSort(_ array: inout[Int], p: Int, r: Int) {
     if p < r {
+        // Randomize pivot
+        let pi = Int.random(in: p..<r)
+        array.swapAt(r, pi)
         let q = partition(&array, p: p, r: r)
         quickSort(&array, p: p, r: q.0)
         quickSort(&array, p: q.1, r: r)
