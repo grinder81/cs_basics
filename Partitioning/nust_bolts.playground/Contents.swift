@@ -8,30 +8,53 @@ Other way of asking this problem is, given a box with locks and keys where one l
 */
 
 func partition(_ array: inout[Int], p: Int, r: Int, x: Int) -> Int {
-    var low = p - 1
+    var i = p
+    var j = p
     
-    for high in p...r-1 {
-        if array[high] < x {
-            low += 1
-            array.swapAt(low, high)
+    while j < r {
+        // if smaller than pivot then keep swaping
+        if array[j] < x {
+            array.swapAt(i, j)
+            i += 1
         }
+        // If equal to pivot then move the equal one to end
+        // then later we can swap to pivot index from last element
+        else if array[j] == x {
+            array.swapAt(j, r)
+            // This is realy important to bring down the index so that
+            // we can start comapring the new moved element with pivot
+            j -= 1
+        }
+        j += 1
     }
-    array.swapAt(low + 1, r)
-    return low + 1
+    // bring the last element to pivot index
+    array.swapAt(i, r)
+    return i
 }
 
-
+// O(nlgn)
 func matchPair(_ nuts: inout[Int], bolts: inout[Int], p: Int, r: Int) {
     if nuts.count != bolts.count { return }
+    
     if p < r {
-        let q = partition(&nuts, p: p, r: r, x: nuts[r])
+        // Do the randomization on bolts
+        // and swap with last element which is the
+        // pivot in our partition
+        let pi = Int.random(in: p..<r)
+        bolts.swapAt(pi, r)
         
-        partition(&bolts, p: p, r: r, x: bolts[r])
+        // Pass bolt last element as pivot
+        let q = partition(&nuts, p: p, r: r, x: bolts[r])
+        
+        // Whatever q came as pivotIndex use it for bolts
+        // to do the partition
+        _ = partition(&bolts, p: p, r: r, x: nuts[q])
         
         matchPair(&nuts, bolts: &bolts, p: p, r: q - 1)
         matchPair(&nuts, bolts: &bolts, p: q + 1, r: r)
     }
 }
+
 
 var nuts = [3, 2, 1, 5, 6]
 var bolts = [6, 5, 1, 2, 3]
