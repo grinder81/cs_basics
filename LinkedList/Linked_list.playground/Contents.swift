@@ -90,6 +90,59 @@ class LinkedList<T> {
         }
     }
     
+    // {HEAD} -->[NEXT]
+    func deleteFirst() -> T? {
+        let value = head?.value
+        let next = head?.next
+        next?.prev = nil
+        head?.next = nil
+
+        self.head = next
+        return value
+    }
+    
+    // ---->[PREV]---{TAIL}
+    func deleteLast() -> T? {
+        let value = tail?.value
+        let prev = tail?.prev
+        
+        tail?.prev = nil
+        prev?.next = nil
+        
+        self.tail = prev
+        return value
+    }
+    
+    // case 1: {HEAD at index}--->[NEXT]
+    // case 2: --->[PREV]--->{node at Index}--->[NEXT]--
+    // case 3: --->[PREV]--->{tail at index}
+    func delete(at index: Int) -> T? {
+        // Case 1
+        if index == 0 {
+            return deleteFirst()
+        }
+        let node = self.node(atIndex: index)
+        let value = node?.value
+        let prev = node?.prev
+        // Case 3:
+        if node === tail {
+            prev?.next = nil
+            tail?.prev = nil
+            self.tail = prev
+            return value
+        }
+        // Case 2:
+        let next = node?.next
+        
+        prev?.next = next
+        next?.prev = prev
+        
+        node?.next = nil
+        node?.prev = nil
+        
+        return value
+    }
+    
     func printList() {
         var string = ""
         var current = head
@@ -127,5 +180,14 @@ list.last?.value
 list[0]
 list.printList()
 list.insert(at: 0, value: 100)
+list.printList()
+list.printListReverse()
+list.deleteFirst()
+list.printList()
+list.printListReverse()
+list.deleteLast()
+list.printList()
+list.printListReverse()
+list.delete(at: 0)
 list.printList()
 list.printListReverse()
