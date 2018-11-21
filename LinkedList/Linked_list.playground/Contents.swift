@@ -11,7 +11,7 @@ class LinkedListNode<T> {
     }
 }
 
-class LinkedList<T> {
+class LinkedList<T> where T: Comparable {
     typealias Node = LinkedListNode<T>
     
     private var head: Node?
@@ -143,6 +143,30 @@ class LinkedList<T> {
         return value
     }
     
+    // Input:   [A]--->[B]--->[C]--->[D]
+    // Output:  [D]--->[C]--->[B]--->[A]
+    func reverse() {
+        var node = head
+        tail = node
+        while let currentNode = node {
+            node = currentNode.next
+            swap(&currentNode.next, &currentNode.prev)
+            head = currentNode
+        }
+    }
+    
+    // Source: [HEAD]-->[A]-->[D]-->[C]
+    // Other: [HEAD]-->[C]-->[A]-->[E]
+    // SourceOutput: [HEAD]-->[A]-->[A]-->[C]-->[C]-->[D]-->[E]
+    func sortedMerge(_ other: LinkedList?) {
+        self.head = LinkedList.sortedMerge(self.head, b: other?.head)
+        var current = head
+        while let next = head?.next {
+            current = next
+        }
+        self.tail = current
+    }
+    
     func printList() {
         var string = ""
         var current = head
@@ -159,13 +183,42 @@ class LinkedList<T> {
         var string = ""
 
         while let prev = current?.prev {
-            string += "\(current?.value), "
+            string += "\(String(describing: current?.value)), "
             current = prev
         }
-        string += "\(current?.value)"
+        string += "\(String(describing: current?.value))"
         print(string)
     }
-
+    
+    static func sortedMerge(_ a: LinkedListNode<T>?, b: LinkedListNode<T>?) -> LinkedListNode<T>? {
+        if a == nil { return b }
+        if b == nil { return a }
+        
+        var result  = a
+        if let valueOfA = a?.value, let valueOfB = b?.value {
+            if valueOfA <= valueOfB {
+                result  = a
+                result?.next = sortedMerge(a?.next, b: b)
+                result?.next?.prev = a
+            } else {
+                result = b
+                result?.next = sortedMerge(a, b: b?.next)
+                result?.next?.prev = b
+            }
+        }
+        return result
+    }
+    
+    static func printList(of head: LinkedListNode<T>? ) {
+        var string = ""
+        var current = head
+        while let next = current?.next {
+            string += "\(String(describing: current?.value)), "
+            current = next
+        }
+        string += "\(String(describing: current?.value))"
+        print(string)
+    }
 }
 
 
@@ -181,13 +234,26 @@ list[0]
 list.printList()
 list.insert(at: 0, value: 100)
 list.printList()
-list.printListReverse()
-list.deleteFirst()
+//list.printListReverse()
+//list.deleteFirst()
+//list.printList()
+//list.printListReverse()
+//list.deleteLast()
+//list.printList()
+//list.printListReverse()
+//list.delete(at: 0)
+//list.printList()
+//list.printListReverse()
+//list.reverse()
+//list.printList()
+
+
+let list2 = LinkedList<Int>()
+list2.insertFirst(value: 10)
+list2.insertFirst(value: 12)
+list2.printList()
+
+let merged = LinkedList.sortedMerge(list.first, b: list2.first)
+LinkedList<Int>.printList(of: merged)
+
 list.printList()
-list.printListReverse()
-list.deleteLast()
-list.printList()
-list.printListReverse()
-list.delete(at: 0)
-list.printList()
-list.printListReverse()
