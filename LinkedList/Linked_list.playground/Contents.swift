@@ -49,6 +49,8 @@ class LinkedList<T> where T: Comparable {
         node.prev  = tail
         tail?.next = node
         self.tail  = node
+        
+        if head == nil { head = tail }
     }
     
     func node(atIndex index: Int) -> Node? {
@@ -190,6 +192,29 @@ class LinkedList<T> where T: Comparable {
         print(string)
     }
     
+    static func sort(_ node: inout LinkedListNode<T>?) {
+        if node == nil || node?.next == nil { return }
+        var a: LinkedListNode<T>?
+        var b: LinkedListNode<T>?
+        split(node, left: &a, right: &b)
+        sort(&a)
+        sort(&b)
+        node = sortedMerge(a, b: b)
+    }
+    
+    static func split(_ node: LinkedListNode<T>?, left: inout LinkedListNode<T>?, right: inout LinkedListNode<T>? ) {
+        var slow = node
+        var fast = node?.next
+        
+        while let next = fast?.next?.next {
+            slow = slow?.next
+            fast = next
+        }
+        left = node
+        right = slow?.next
+        slow?.next = nil
+    }
+    
     static func sortedMerge(_ a: LinkedListNode<T>?, b: LinkedListNode<T>?) -> LinkedListNode<T>? {
         if a == nil { return b }
         if b == nil { return a }
@@ -222,38 +247,19 @@ class LinkedList<T> where T: Comparable {
 }
 
 
-let list = LinkedList<Int>()
-list.first
-list.isEmpty
-list.insertFirst(value: 10)
-list.insertFirst(value: 9)
-list.insertLast(value: 11)
-list.first?.value
-list.last?.value
-list[0]
-list.printList()
-list.insert(at: 0, value: 100)
-list.printList()
-//list.printListReverse()
-//list.deleteFirst()
-//list.printList()
-//list.printListReverse()
-//list.deleteLast()
-//list.printList()
-//list.printListReverse()
-//list.delete(at: 0)
-//list.printList()
-//list.printListReverse()
-//list.reverse()
-//list.printList()
+let list1 = LinkedList<Int>()
+list1.insertLast(value: 5)
+list1.insertLast(value: 10)
+list1.insertLast(value: 15)
 
+var list2 = LinkedList<Int>()
+list2.insertLast(value: 20)
+list2.insertLast(value: 3)
+list2.insertLast(value: 2)
 
-let list2 = LinkedList<Int>()
-list2.insertFirst(value: 10)
-list2.insertFirst(value: 12)
-list2.printList()
-
-let merged = LinkedList.sortedMerge(list.first, b: list2.first)
+var merged = LinkedList.sortedMerge(list1.first, b: list2.first)
 LinkedList<Int>.printList(of: merged)
 
-list.printList()
+var head = list2.first
+LinkedList<Int>.sort(&head)
+LinkedList<Int>.printList(of: head)
