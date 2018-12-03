@@ -1,6 +1,7 @@
 import Foundation
 
 // https://www.youtube.com/watch?v=MFK0WYeVEag
+// https://ivanyu.me/blog/2013/10/15/z-algorithm/
 
 // Defination: Given a string S, Z[i](S) = length of the
 // longest substring in S, starting at position i that matches the PREFIX of S.
