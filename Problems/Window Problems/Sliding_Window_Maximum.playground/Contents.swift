@@ -17,10 +17,12 @@ func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
     for index in k..<n {
         output.append(nums[deQueue.first!])
         
+        // Anything outside window need to remove
         while deQueue.count > 0 && index - k  >= deQueue.first! {
             deQueue.removeFirst()
         }
         
+        // Remove anything less or equal to current index value
         while deQueue.count > 0 && nums[index] >= nums[deQueue.last!] {
             deQueue.removeLast()
         }

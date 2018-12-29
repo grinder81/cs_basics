@@ -89,7 +89,6 @@ quickSortByTwoWay(array: &array1, p: 0, r: array1.count - 1)
 
 
 // Re-order an array element so that even element at first
-
 func evenElementAtFirst(array: inout[Int]) {
     var low = 0
     var high = array.count - 1
@@ -260,8 +259,11 @@ func addBinaryString(b1: String, b2: String) -> String {
     }
 }
 
-var a1 = "11"
-var a2 = "1"
+//"110010"
+//"10111"
+
+var a1 = "110010"
+var a2 = "10111"
 addBinaryString(b1: a1, b2: a2)
 
 func longgestEqaulSubArray(_ array: [Int]) -> Int {
@@ -330,3 +332,548 @@ func maxArea(_ height: [Int]) -> Int {
     return maxArea
 }
 maxArea([2,3,4,5,18,17,6])
+
+
+func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+    /// target = nums[i] + z
+    /// z = target - nums[i]
+    /// we look up z in set
+    /// if exsit then return i and set.value
+    var set: [Int: Int] = [:]
+    let n = nums.count
+    for index in 0..<n {
+        if let value = set[nums[index]] {
+            return [value, index]
+        }
+        set[target - nums[index]] = index
+    }
+    return []
+}
+
+twoSum([2, 7, 11, 15], 9)
+
+
+func twoSum(_ nums: [Int], fromIndex: Int, target: Int) -> [[Int]] {
+    print(target)
+    let n = nums.count
+    var set: [Int: Int] = [:]
+    var result: [[Int]] = []
+    /// x = y + z
+    /// z = (x == target) - (y == nums[index])
+    for index in fromIndex..<n {
+        if let value = set[nums[index]] {
+            result.append([value, index])
+        }
+        let z = target - nums[index]
+        set[z] = index
+    }
+    return result
+}
+
+/// https://leetcode.com/problems/3sum/submissions/
+func threeSum(_ nums: [Int]) -> [[Int]] {
+    var result: [[Int]] = []
+    
+    let n = nums.count
+    let array = nums.sorted()
+    var index = 0
+    while index < (n - 2) {
+        let sum = array[index] * -1
+        var l = index + 1
+        var r = n - 1
+        
+        while l < r {
+            if sum == array[l] + array[r] {
+                result.append([array[index], array[l], array[r]])
+                while l < r && array[l] == array[l + 1] {
+                    l += 1
+                }
+                while l < r && array[r] == array[r - 1] {
+                    r -= 1
+                }
+                l += 1
+                r -= 1
+            } else if sum > array[l] + array[r] {
+                l += 1
+            } else {
+                r -= 1
+            }
+        }
+        
+        while index < n - 1 && array[index] == array[index + 1] {
+            index += 1
+        }
+        index += 1
+    }
+    return result
+}
+/// -4, -1, -1, 0, 1, 2
+threeSum([-1, 0, 1, 2, -1, -4])
+
+
+/// https://leetcode.com/problems/3sum-closest/
+
+func threeSumClosest(_ nums: [Int], _ target: Int) -> Int {
+    let array = nums.sorted()
+    let n = nums.count
+    
+    var result = target
+    var closest = Int.max
+    
+    /// T = A + B + C
+    /// target - T === 0 is the best or
+    /// target - T close to 0 is the 2nd best
+    
+    var index = 0
+    while index < (n - 2) {
+        var l = index + 1
+        var r = n - 1
+        
+        while l < r {
+            /// A + B + C
+            let t = array[index] + array[l] + array[r]
+            let d = target - t
+            if d == 0 {
+                return t
+            } else if d > 0 {
+                l += 1
+            } else {
+                r -= 1
+            }
+            if abs(d) < closest {
+                closest = abs(d)
+                result = t
+            }
+        }
+//        while index < n - 1 && array[index] == array[index + 1] {
+//            index += 1
+//        }
+        index += 1
+    }
+    return result
+}
+
+/// -1, 1, 2
+/// -1 + 1 + 2 = 2
+/// 2 - (-1 + 1)
+/// T = 2, target = 1
+
+threeSumClosest([0, 1, 2], 3)
+
+func palindromeExtension(_ array: [Character], leftDir: Int, rightDir: Int) ->(Int, Int) {
+    var l = leftDir
+    var r = rightDir
+    
+    while l >= 0 && r < array.count && array[l] == array[r] {
+        l -= 1
+        r += 1
+    }
+    return (l + 1, r - l - 1)
+}
+
+func longestPalindrome(_ s: String) -> String {
+    let array = Array(s)
+    let n = array.count
+
+    if n < 2 { return s }
+    
+    var palindrom: (Int, Int) = (0, Int.min)
+    
+    for index in 0..<n-1 {
+        let v1 = palindromeExtension(array, leftDir: index, rightDir: index)
+        if v1.1 > palindrom.1 {
+            palindrom = v1
+        }
+        let v2 = palindromeExtension(array, leftDir: index, rightDir: index + 1)
+        if v2.1 > palindrom.1 {
+            palindrom = v2
+        }
+    }
+
+    let leftIndex   = s.index(s.startIndex, offsetBy: palindrom.0)
+    let rightIndex  = s.index(s.startIndex, offsetBy: palindrom.0 + palindrom.1)
+    return String(s[leftIndex..<rightIndex])
+}
+
+longestPalindrome("babad")
+
+func isValid(_ s: String) -> Bool {
+    let array = Array(s)
+    let n = array.count
+    
+    if n == 0 { return true }
+    let bracketsHash: [Character: Character] = [")": "(", "}": "{", "]": "["]
+    var stack: [Character] = []
+    var index = 0
+    while index < n {
+        if bracketsHash.values.contains(array[index]) {
+            stack.append(array[index])
+        } else {
+            if let opening = bracketsHash[array[index]], stack.count > 0, opening == stack.last!  {
+                stack.removeLast()
+            } else {
+                return false
+            }
+        }
+        index += 1
+    }
+    
+    return stack.count == 0
+}
+
+isValid("[")
+
+
+// https://leetcode.com/problems/longest-valid-parentheses/
+func longestValidParentheses(_ s: String) -> Int {
+    let array = Array(s)
+    let n = array.count
+    
+    if n == 0 { return 0 }
+    var stack: [Int] = []
+    var maxLen = 0
+    var index = 0
+    
+    stack.append(-1)
+    
+    while index < n {
+        if array[index] == "(" {
+            stack.append(index)
+        } else {
+            if stack.count > 0 {
+                stack.removeLast()
+            }
+            if let last = stack.last {
+                maxLen = max(maxLen, index - last)
+            } else {
+                stack.append(index)
+            }
+        }
+        index += 1
+    }
+    return maxLen
+}
+
+
+/// ((()))
+/// ()()
+/// ()
+/// ()(()
+/// (())(())
+
+longestValidParentheses("()())")
+
+
+/// https://leetcode.com/problems/valid-parenthesis-string/
+/**
+    Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+    Any right parenthesis ')' must have a corresponding left parenthesis '('.
+    Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+    '*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string.
+    An empty string is also valid.\
+ **/
+func checkValidString(_ s: String) -> Bool {
+    let array = Array(s)
+    let n = array.count
+    
+    if n == 0 { return true }
+    
+    var leftIds: [Int] = []
+    var starIds: [Int] = []
+    
+    for index in 0..<n {
+        if array[index] == "(" {
+            leftIds.append(index)
+        } else if array[index] == "*" {
+            starIds.append(index)
+        } else {
+            if leftIds.count == 0 &&
+               starIds.count == 0 {
+                return false
+            }
+            if leftIds.count > 0 {
+                _ = leftIds.removeLast()
+            } else {
+                _ = starIds.removeLast()
+            }
+        }
+    }
+
+    while leftIds.count > 0 && starIds.count > 0 {
+        if leftIds.last! > starIds.last! {
+            return false
+        }
+        _ = leftIds.removeLast()
+        _ = starIds.removeLast()
+    }
+    return leftIds.count == 0
+}
+
+/// ((*)    -> * as right
+/// (*))    -> * as Left
+/// (*)     -> * as empty
+/// ***))
+/// *)(
+/// ((******
+
+let r  = checkValidString("((()))()(())(*()()())**(())()()()()((*()*))((*()*)")
+print(r)
+
+func validPalindrome(_ s: String) -> Bool {
+    let array = Array(s)
+    let n = array.count
+    
+    if n <= 1 { return true }
+    
+    var l = 0
+    var r = n - 1
+    
+    while l <= r {
+        if array[l] == array[r] {
+            l += 1
+            r -= 1
+        } else {
+            var ll = l + 1
+            var lr = r
+            while ll <= lr && array[ll] == array[lr] {
+                ll += 1
+                lr -= 1
+            }
+            if ll >= lr { return true }
+            
+            var rl = l
+            var rr = r - 1
+            while rl <= rr && array[rl] == array[rr] {
+                rl += 1
+                rr -= 1
+            }
+            if rl >= rr { return true }
+            
+            return false
+        }
+    }
+    return true
+}
+
+/// abc
+/// eeede
+
+let p = validPalindrome("deeee")
+print(p)
+
+func addBinary(_ a: String, _ b: String) -> String {
+    let A = Array(a)
+    let B = Array(b)
+    
+    let nA = A.count
+    let nB = B.count
+    
+    if nA == 0 { return b }
+    if nB == 0 { return a }
+    
+    let binaryAdd = { (a1: Character, a2: Character) -> (Character, Character) in
+        if a1 == "1" && a2 == "1" {
+            return ("0", "1")
+        }
+        if a1 == "0" && a2 == "1" {
+            return ("1", "0")
+        }
+        if a1 == "1" && a2 == "0" {
+            return ("1", "0")
+        }
+        return ("0", "0")
+    }
+    
+    var aIndex = nA - 1
+    var bIndex = nB - 1
+    var carry: Character = "0"
+    var result: [Character] = []
+    while aIndex >= 0 &&  bIndex >= 0 {
+        /// r = a + b + c
+        /// 1 + 1 = (0, 1) A + B
+        /// 0 + 1 = (1, 0) R + C
+        let r1 = binaryAdd(A[aIndex], B[bIndex])
+        let r2 = binaryAdd(r1.0, carry)
+        carry = r1.1
+        result.append(r2.0)
+        aIndex -= 1
+        bIndex -= 1
+    }
+    
+    while aIndex >= 0 {
+        let r = binaryAdd(A[aIndex], carry)
+        carry = r.1
+        result.append(r.0)
+        aIndex -= 1
+    }
+    
+    while bIndex >= 0 {
+        let r = binaryAdd(B[bIndex], carry)
+        carry = r.1
+        result.append(r.0)
+        bIndex -= 1
+    }
+    result.append(carry)
+    return String(result.reversed())
+}
+
+let ss = addBinary("11", "11111")
+print(ss)
+
+
+/// https://leetcode.com/problems/trapping-rain-water/
+
+func trap(_ height: [Int]) -> Int {
+    if height.count < 2 { return 0 }
+    
+    let n = height.count
+    var trapArea = 0
+    var index = 0
+    
+    /// Without stack
+    var l = 0
+    var r = n - 1
+    var lMax = 0
+    var rMax = 0
+    
+    while l < r {
+        if height[l] < height[r] {
+            if height[l] >= lMax {
+                lMax = height[l]
+            } else {
+                trapArea += (lMax - height[l])
+            }
+            l += 1
+        } else {
+            if height[r] >= rMax {
+                rMax = height[r]
+            } else {
+                trapArea += (rMax - height[r])
+            }
+            r -= 1
+        }
+    }
+    
+    /// With Stack
+    /*
+    var s: [Int] = []
+    
+    while index < n {
+        // if current height is less than or equal to
+        // stack top then keep adding to stack
+        if s.count == 0 || height[index] <= height[s.last!] {
+            s.append(index)
+            index += 1
+        } else {
+            // This is the one is holding water
+            let r = s.removeLast()
+            if s.count > 0 {
+                // Find the min of current height and the
+                // top of the stack
+                let h = min(height[index], height[s.last!])
+                let water = (index - s.last! - 1) * (h - height[r])
+                trapArea += water
+            }
+        }
+    }
+    */
+    
+    return trapArea
+}
+
+let t = trap([2, 1, 2])
+print(t)
+
+
+// https://leetcode.com/problems/largest-rectangle-in-histogram/
+
+func largestRectangleArea(_ heights: [Int]) -> Int {
+    if heights.count == 0 { return 0 }
+    
+    let n = heights.count
+    
+    var maxArea = 0
+    var lessFromLeft    = Array<Int>(repeating: 0, count: n)
+    var lessFromRight   = Array<Int>(repeating: 0, count: n)
+    
+    lessFromLeft[0] = -1
+    lessFromRight[n - 1] = n
+    
+    var i = 1
+    while i < n {
+        var p = i - 1
+        while p >= 0 && heights[p] >= heights[i] {
+            p = lessFromLeft[p]
+        }
+        lessFromLeft[i] = p
+        i += 1
+    }
+    
+    i = n - 2
+    while i >= 0 {
+        var p = i + 1
+        while p < n && heights[p] >= heights[i] {
+            p = lessFromRight[p]
+        }
+        lessFromRight[i] = p
+        i -= 1
+    }
+    
+    i = 0
+    while i < n {
+        maxArea = max(maxArea, heights[i] * (lessFromRight[i] - lessFromLeft[i] - 1))
+        i += 1
+    }
+    
+    /// Stack based
+    /*
+     var stack: [Int] = []
+     var maxArea = 0
+     var i = 0
+     
+     
+     while i < n {
+     let h = heights[i]
+     if stack.count == 0 || h >= heights[stack.last!] {
+     stack.append(i)
+     i += 1
+     } else {
+     let top = stack.removeLast()
+     // if there is no element on the stack then
+     // i itself is the whole length
+     // otherwise anything
+     // h[stack.last + 1] >= h[top]
+     let area = (stack.count == 0 ? i : (i - 1 - stack.last!)) * heights[top]
+     maxArea = max( maxArea, area)
+     }
+     }
+     
+     while stack.count != 0 {
+     let top = stack.removeLast()
+     let area = (stack.count == 0 ? i : (i - 1 - stack.last!)) * heights[top]
+     maxArea = max( maxArea, area)
+     }
+     */
+    
+    // Tricky way
+    /*
+     while i <= n {
+     let h = i == n ? 0 : heights[i]
+     if stack.count == 0 || h >= heights[stack.last!] {
+     stack.append(i)
+     } else {
+     let top = stack.removeLast()
+     // if there is no element on the stack then
+     // i itself is the whole length
+     // otherwise anything
+     // h[stack.last + 1] >= h[top]
+     let area = stack.count == 0 ? i : (i - 1 - stack.last!) * heights[top]
+     maxArea = max( maxArea, area)
+     i -= 1
+     }
+     i += 1
+     }
+     */
+    
+    return maxArea
+}
