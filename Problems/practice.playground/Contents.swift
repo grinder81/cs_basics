@@ -877,3 +877,174 @@ func largestRectangleArea(_ heights: [Int]) -> Int {
     
     return maxArea
 }
+
+
+/// For Max-Heap
+/// 1. At anytime root node is the max value
+/// 2. Both child of a parent node is <= to parent node value
+/// 3. For node i
+///     a. left = 2 * i + 1
+///     b. right = 2 * i + 2
+///     c. parent = (i - i) / 2
+/// 4. Accessing top value is O(1)
+/// 5. Adding or removing is O(lg n)
+
+class Heap {
+    private var data: [Int] = []
+    private(set) var size: Int = 0
+    
+    func parent(of i: Int) -> Int {
+        return (i - 1) / 2
+    }
+    
+    func left(childOf i: Int) -> Int {
+        return 2 * i + 1
+    }
+    
+    func right(childOf i: Int) -> Int {
+        return 2 * i + 2
+    }
+    
+    var peek: Int? {
+        return data.first
+    }
+}
+
+extension Heap {
+    /// Public funcsions
+    /// 1. insert
+    /// 2. sort
+    /// 3. sortArray
+    /// 4. buildMaxHeap
+    
+    func insert(_ key: Int) {
+        // 1. Add min value to end of the array
+        // 2. Increase the size
+        // 3. reHeapify
+        data.append(Int.min)
+        size += 1
+        replace(at: size - 1, key: key)
+    }
+    
+    func pop() {
+        if size == 0 { return }
+        data.swapAt(0, size - 1)
+        size -= 1
+        maxHeapify(0)
+    }
+    
+    /// We only need to heapify parents
+    /// and all parents nodes are [0...n/2 - 1]
+    /// O(n lg n)
+    func buildHeap(from array: [Int]) {
+        data = array
+        size = array.count
+        for index in stride(from: (size/2 - 1), through: 0, by: -1) {
+            maxHeapify(index)
+        }
+    }
+    
+    func sort() -> [Int] {
+        for index in stride(from: data.count - 1, through: 1, by: -1) {
+            data.swapAt(0, index)
+            size -= 1
+            maxHeapify(0)
+        }
+        return data
+    }
+    
+    private func maxHeapify(_ i: Int) {
+        let lChildIndex = left(childOf: i)
+        let rChildIndex = right(childOf: i)
+        
+        var largetsOne = i
+        
+        if lChildIndex < size && data[lChildIndex] > data[largetsOne] {
+            largetsOne = lChildIndex
+        }
+        
+        if rChildIndex < size && data[rChildIndex] > data[largetsOne] {
+            largetsOne = rChildIndex
+        }
+        
+        if largetsOne != i {
+            data.swapAt(i, largetsOne)
+            maxHeapify(largetsOne)
+        }
+    }
+    
+    private func replace(at index: Int, key: Int) {
+        assert(key > data[index], "key smaller than current value")
+        var i = index
+        data[i] = key
+        while i > 0 && data[parent(of: i)] < data[i] {
+            data.swapAt(parent(of: i), i)
+            i = parent(of: i)
+        }
+    }
+}
+
+let heap = Heap()
+heap.insert(100)
+heap.insert(200)
+heap.insert(20)
+heap.insert(10)
+heap.insert(300)
+
+print(heap.peek)
+
+heap.pop()
+
+print(heap.peek)
+
+heap.sort()
+
+/// https://leetcode.com/problems/find-median-from-data-stream/submissions/
+class MedianFinder {
+    
+    var smallMaxHeap = Heap()
+    var largeMinHeap = Heap()
+    
+    /** initialize your data structure here. */
+    init() {
+        
+    }
+    
+    func addNum(_ num: Int) {
+        smallMaxHeap.insert(num)
+        largeMinHeap.insert(-smallMaxHeap.peek!)
+        smallMaxHeap.pop()
+        if smallMaxHeap.size < largeMinHeap.size {
+            smallMaxHeap.insert(-largeMinHeap.peek!)
+            largeMinHeap.pop()
+        }
+    }
+    
+    func findMedian() -> Double {
+        let m = smallMaxHeap.size > largeMinHeap.size ? Double(smallMaxHeap.peek!) : Double(smallMaxHeap.peek! - largeMinHeap.peek!) / Double(2)
+        return Double(m)
+    }
+}
+
+func tileTriominos(_ n: Int, _ bottomRight: (Int, Int), _ array: inout[[Int]], _ size: Int, _ p: (Int, Int)) {
+    if n == 2 {
+        print(bottomRight)
+        return
+    }
+    // first quadrent
+    let c1 = (bottomRight.0, bottomRight.1 - n / 2)
+    let c2 = (bottomRight.0 - n / 2, bottomRight.1 - n / 2)
+    let c3 = (bottomRight.0 - n / 2, bottomRight.1)
+    let c4 = (bottomRight.0, bottomRight.1)
+    
+    tileTriominos(n / 2, c1, &array, size, p)
+    tileTriominos(n / 2, c2, &array, size, p)
+    tileTriominos(n / 2, c3, &array, size, p)
+    tileTriominos(n / 2, c4, &array, size, p)
+}
+
+var tile: [[Int]] = [[]]
+//tileTriominos(2, (1, 1), &tile, 2, (0, 0))
+//tileTriominos(4, (4, 4), &tile, 4, (0, 0))
+//tileTriominos(8, (8, 8), &tile, 8, (0, 0))
+tileTriominos(16, (16, 16), &tile, 16, (0, 0))
