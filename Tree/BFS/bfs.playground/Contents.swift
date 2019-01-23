@@ -132,7 +132,6 @@ func maxLevelSum(_ source: Node) -> Int {
     queue.enqueue(source)
 
     var maxSum = Int.min
-    var level = 0
     source.visited = true
     
     while !queue.isEmpty {
