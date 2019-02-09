@@ -1,5 +1,13 @@
 import Foundation
 
+// Time: O(nlogn)
+// Inplace sort: Yes
+// Stable sort: No
+// Comparision sort: Yes
+// Some facts: Any comparison sort can have avg O(n lg n) at best
+// due to the fact that comparison tree is a binary tree with height
+// of 2^h where is h is the height
+
 func partition(_ array: inout[Int], p: Int, r: Int) -> (Int, Int) {
     var low     = p
     var high    = r

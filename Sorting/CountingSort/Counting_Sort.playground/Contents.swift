@@ -9,7 +9,8 @@ import Foundation
 // Stable: Yes.
 // Inplace: No
 // Aux space: Yes
-
+// It's ONYLY applicable if data range is limited
+// Like: 0 to 1000
 
 func countingSort(_ array: [Int], output: inout[Int], k: Int) {
     var c = Array(repeating: 0, count: k)

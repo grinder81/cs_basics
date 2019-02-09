@@ -9,7 +9,7 @@ func partition(_ array: inout[Int], p: Int, r: Int) -> Int {
     var low  = p - 1
 
     // Pivot element
-    var x = array[r]
+    let x = array[r]
     
     for high in p...r-1 {
         if array[high] <= x {

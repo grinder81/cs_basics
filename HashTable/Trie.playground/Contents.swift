@@ -40,12 +40,12 @@ class Trie: NSObject, NSCoding {
         self.init()
         let words = decoder.decodeObject(forKey: "words") as? [String]
         for word in words! {
-            //self.insert(word: word)
+            self.insert(word: word)
         }
     }
     
     func encode(with coder: NSCoder) {
-        //coder.encode(self.words, forKey: "words")
+        coder.encode(self.words, forKey: "words")
     }
     
     /// All words currently in the trie
@@ -70,6 +70,83 @@ class Trie: NSObject, NSCoding {
         currentNode.isTerminating = true
     }
     
+    func contains(word: String) -> Bool {
+        guard !word.isEmpty else { return false }
+        
+        var currentNode = root
+        let characters = Array(word.lowercased())
+        var index = 0
+        while index < characters.count, let childNode = currentNode.children[characters[index]] {
+            currentNode = childNode
+            index += 1
+        }
+        guard index == characters.count, currentNode.isTerminating else { return false }
+        return true
+    }
+    
+    func remove(word: String) {
+        guard !word.isEmpty else { return }
+        guard let terminalNode = findTerminalNodeOf(word: word) else {
+            return
+        }
+        if terminalNode.isLeaf {
+            deleteNodesForWordEndingWith(terminalNode: terminalNode)
+        } else {
+            terminalNode.isTerminating = false
+        }
+        wordCount -= 1
+    }
+    
+    private func findTerminalNodeOf(word: String) -> Node? {
+        let characters = Array(word.lowercased())
+        var currentNode = root
+        for character in characters {
+            guard let childNode = currentNode.children[character] else {
+                return nil
+            }
+            currentNode = childNode
+        }
+        return currentNode.isTerminating ? currentNode : nil
+    }
+    
+    private func deleteNodesForWordEndingWith(terminalNode: Node) {
+        var lastNode = terminalNode
+        var character = lastNode.value
+        while lastNode.isLeaf, let parentNode = lastNode.parent {
+            lastNode = parentNode
+            lastNode.children[character!] = nil
+            character = lastNode.value
+            if lastNode.isTerminating {
+                break
+            }
+        }
+    }
+    
+    func wordsWith(prefix word: String) -> [String] {
+        var words: [String] = []
+        let lowerCased = word.lowercased()
+        if let lastNode = findLastNodeOf(word: word) {
+            if lastNode.isTerminating {
+                words.append(lowerCased)
+            }
+            for childNode in lastNode.children.values {
+                let childWors = wordsInSubtrie(rootNode: childNode, partialWord: lowerCased)
+                words += childWors
+            }
+        }
+        return words
+    }
+    
+    private func findLastNodeOf(word: String) -> Node? {
+        var characters = Array(word.lowercased())
+        var currentNode = root
+        for character in characters {
+            guard let childNode = currentNode.children[character] else { return nil }
+            currentNode = childNode
+        }
+        return currentNode
+    }
+    
     private func wordsInSubtrie(rootNode: Node, partialWord: String) -> [String] {
         var subtrieWords = [String]()
         var previousLetters = partialWord
@@ -91,17 +168,10 @@ class Trie: NSObject, NSCoding {
     }
 }
 
-var strArray1 = [String]()
-var strArray2 = [String]()
+var t = Trie()
+t.insert(word: "Hello")
+t.insert(word: "Hel")
+t.contains(word: "Hel")
+t.contains(word: "Hel")
+t.wordsWith(prefix: "He")
 
-strArray1.append("1")
-strArray1.append("2")
-strArray1.append("3")
-strArray1.append("4")
-
-strArray2.append("A")
-strArray2.append("B")
-strArray2.append("C")
-strArray2.append("D")
-
-strArray1.append(contentsOf: strArray2)
