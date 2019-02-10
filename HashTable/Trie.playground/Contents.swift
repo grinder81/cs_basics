@@ -53,6 +53,7 @@ class Trie: NSObject, NSCoding {
         return wordsInSubtrie(rootNode: root, partialWord: "")
     }
     
+    // O(n)
     func insert(word: String) {
         guard word.isEmpty == false else { return }
         var currentNode = root
@@ -70,6 +71,7 @@ class Trie: NSObject, NSCoding {
         currentNode.isTerminating = true
     }
     
+    // O(n)
     func contains(word: String) -> Bool {
         guard !word.isEmpty else { return false }
         
@@ -84,6 +86,7 @@ class Trie: NSObject, NSCoding {
         return true
     }
     
+    // O(n)
     func remove(word: String) {
         guard !word.isEmpty else { return }
         guard let terminalNode = findTerminalNodeOf(word: word) else {
@@ -122,6 +125,7 @@ class Trie: NSObject, NSCoding {
         }
     }
     
+    // O(n * l) where n is total words and l is the avg word length
     func wordsWith(prefix word: String) -> [String] {
         var words: [String] = []
         let lowerCased = word.lowercased()
