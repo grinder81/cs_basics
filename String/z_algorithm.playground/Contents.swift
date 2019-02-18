@@ -30,6 +30,8 @@ func zetaAlgorithm(ptrn: String) -> [Int]? {
     var patternIndex: Int = 0
     
     for k in 1 ..< patternLength {
+        // Case 1: k > r. Explicit comparision
+        // Out side z box or new z-box calculation start
         if k > right { // Outside a Z-box: compare the characters until mismatch
             patternIndex = 0
             // Use two finger comparision
@@ -47,9 +49,12 @@ func zetaAlgorithm(ptrn: String) -> [Int]? {
             k_1 = k - left + 1
             betaLength = right - k + 1
             
+            // Case 2: Z[k_1-1] < Beta
+            // Then Z[k] = Z[k_1-1]
             if zeta[k_1 - 1] < betaLength {
                 // // Entirely inside a Z-box: we can use the values computed before
                 zeta[k] = zeta[k_1 - 1]
+            // Case 3: Z[k_1-1] >= Beta
             } else if zeta[k_1 - 1] >= betaLength {
                 // Not entirely inside a Z-box: we must proceed with comparisons too
                 textIndex = betaLength
@@ -71,6 +76,11 @@ func zetaAlgorithm(ptrn: String) -> [Int]? {
 func indexesOf(pattern: String, in source: String) -> [Int]? {
     let parrentLength = pattern.count
     // Consider there is no `$` in source and pattern
+    // If you dont't use special character, you can find a
+    // single occurance of a pattern by doing P + T
+    // but you won't be able to find all
+    // like P = AA and T = AAAA then P + T = AAAAAA
+    // and you will get last occurance of AA only
     let zetaIndices = zetaAlgorithm(ptrn: pattern + "$" + source)
     
     guard let zeta = zetaIndices else { return nil }
@@ -87,5 +97,5 @@ func indexesOf(pattern: String, in source: String) -> [Int]? {
     return indexes
 }
 
-let output = indexesOf(pattern: "CATA", in: "GAGAACATACATGACCAT")
+let output = indexesOf(pattern: "CATA", in: "GAGAACATACATGACCATA")
 print(output)

@@ -14,6 +14,7 @@ func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
         }
         deQueue.append(index)
     }
+    print(deQueue)
     for index in k..<n {
         output.append(nums[deQueue.first!])
         
@@ -34,3 +35,48 @@ func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
 }
 
 maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3)
+
+func maxSlidingWindowSimple(_ nums: [Int], _ k: Int) -> [Int] {
+    guard nums.count > 0 else {
+        return []
+    }
+    
+    let n = nums.count
+    var output: [Int] = []
+
+    typealias Pair = (value: Int, index: Int)
+    var maxP = Pair(value: nums[0], index: 0)
+    for i in 1..<k {
+        if nums[i] >= maxP.value {
+            maxP = Pair(value: nums[i], index: i)
+        }
+    }
+    
+    var j = k
+    while j < n {
+        output.append(maxP.value)
+        
+        // if maxP.index is inside window which is <= j
+        // then max(maxP.value, nums[j])
+        // else loop from maxP.index + 1 to j to find new maxP
+        
+        if (j - maxP.index) < k {
+            maxP = nums[j] >= maxP.value ? Pair(value: nums[j], index: j) : maxP
+        } else {
+            var l = maxP.index + 1
+            maxP = Pair(value: nums[j], index: j)
+            while l < j {
+                if nums[l] >= maxP.value {
+                    maxP = Pair(value: nums[l], index: l)
+                }
+                l += 1
+            }
+        }
+        j += 1
+    }
+    output.append(maxP.value)
+    return output
+}
+
+maxSlidingWindowSimple([1,3,-1,-3,5,3,6,7], 3)
+//maxSlidingWindowSimple([1,-1], 1)

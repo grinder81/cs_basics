@@ -1,6 +1,8 @@
 import Foundation
 
-// Time: O(m * n)
+// Preprocessing Time: O(m)
+// Matching Time: O((n - m + 1) * m)
+// In worst case: O(n * m)
 
 let prime = 101
 
@@ -28,8 +30,8 @@ func nextHash(prevHash: Double, dropped: Int, added: Int, patternSize: Int) -> D
 }
 
 func search(pattern: String, in text: String) -> Int? {
-    let patternArray = pattern.flatMap { $0.asInt }
-    let textArray = text.flatMap { $0.asInt }
+    let patternArray = pattern.compactMap { $0.asInt }
+    let textArray = text.compactMap { $0.asInt }
     
     guard textArray.count >= patternArray.count else { return nil }
     

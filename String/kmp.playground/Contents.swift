@@ -62,6 +62,9 @@ func kmp(ptnr: String, in source: String) -> [Int]? {
     
     guard pattern.count > 0 else { return nil }
 
+    
+    // In other words, suffixPrefix[i] is the longest proper substring of
+    // P that ends at position i and that is a prefix of P.
     var suffixPrefix = [Int](repeating: 0, count: patternLength)
     var textIndex = 0
     var patternIndex = 0
@@ -76,6 +79,9 @@ func kmp(ptnr: String, in source: String) -> [Int]? {
         textIndex = patternIndex + zeta[patternIndex] - 1
         suffixPrefix[textIndex] = zeta[patternIndex]
     }
+    
+    print(zeta)
+    print(suffixPrefix)
     
     // Search stage: scanning the text for pattern matching
     textIndex = 0
@@ -101,5 +107,7 @@ func kmp(ptnr: String, in source: String) -> [Int]? {
     return indices
 }
 
-let output = kmp(ptnr: "ACTGACTA", in: "GCACTGACTGACTGACTAG")
+let output = kmp(ptnr: "ABCA", in: "XXABCAXABCA")
 print(output)
+
+var array = Array(repeating: Array<Int>(repeating: 0, count: 0), count: 10)

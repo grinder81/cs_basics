@@ -1048,3 +1048,81 @@ var tile: [[Int]] = [[]]
 //tileTriominos(4, (4, 4), &tile, 4, (0, 0))
 //tileTriominos(8, (8, 8), &tile, 8, (0, 0))
 tileTriominos(16, (16, 16), &tile, 16, (0, 0))
+
+extension Character {
+    var asInt: Int {
+        let s = String(self).unicodeScalars
+        return Int(s[s.startIndex].value)
+    }
+}
+
+class RobinKarp {
+    
+    let prime = 101
+    
+    private func hash(_ nums: [Int]) -> Double {
+        var exp = nums.count - 1
+        var value: Double = 0
+        var i = 0
+        while i < nums.count {
+            value += Double(nums[i]) * pow(Double(prime), Double(exp))
+            i += 1
+            exp -= 1
+        }
+        return value
+    }
+    
+    private func nextHash(_ value: Double, _ oldValue: Int, _ newValue: Int, _ n: Int) -> Double {
+        // x1 * p^n-1 + x2 * p^n-2 + x3*p^n-3
+        let h1 = Double(oldValue) * pow(Double(prime), Double(n-1))
+        let r = value - h1
+        return r * Double(prime) + Double(newValue)
+    }
+    
+    func subString(_ s: String, _ p: String) -> Int? {
+        guard !s.isEmpty else {
+            return nil
+        }
+        
+        let pattern = Array(p.compactMap{ $0.asInt })
+        let text = Array(s.compactMap{ $0.asInt })
+        
+        let pLen = pattern.count
+        let sLen = text.count
+        
+        guard sLen >= pLen else { return nil }
+        
+        let patternHash = hash(pattern)
+        
+        var window = Array(text[0...(pLen - 1)])
+        var windowHash = hash(window)
+        
+        // Early check
+        if patternHash == windowHash, pattern == window {
+            return 0
+        }
+        
+        var i = 1
+        var prevHash = windowHash
+        while i < (sLen - pLen + 1) {
+            window = Array(text[i...(i + pLen - 1)])
+            windowHash = nextHash(prevHash, text[i - 1], text[i + pLen - 1], pLen)
+            if windowHash == patternHash, pattern == window {
+                return i
+            }
+            prevHash = windowHash
+            i += 1
+        }
+        
+        // Find the hash of the pattern
+        // Use rolling hash to find the pattern
+        
+        return nil
+    }
+    
+}
+
+let robinK = RobinKarp()
+robinK.subString("aas", "s")
+
+
