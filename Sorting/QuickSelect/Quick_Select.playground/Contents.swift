@@ -41,6 +41,7 @@ func quickSelect(_ array: inout[Int], p: Int, r: Int, k: Int) -> Int {
     }
 }
 
-var array = [7, 10, 4, 3, 20, 15]
-let item = quickSelect(&array, p: 0, r: array.count - 1, k: 3)
+var array = [3, 1 , 2, 5]
+let n = array.count
+let item = quickSelect(&array, p: 0, r: array.count - 1, k: (n / 2))
 print(item)

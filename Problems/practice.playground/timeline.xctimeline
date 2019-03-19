@@ -3,18 +3,23 @@
    version = "3.0">
    <TimelineItems>
       <LoggerValueHistoryTimelineItem
-         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=839&amp;CharacterRangeLoc=3156&amp;EndingColumnNumber=29&amp;EndingLineNumber=179&amp;StartingColumnNumber=0&amp;StartingLineNumber=140&amp;Timestamp=571951964.504583"
+         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=839&amp;CharacterRangeLoc=3156&amp;EndingColumnNumber=29&amp;EndingLineNumber=179&amp;StartingColumnNumber=0&amp;StartingLineNumber=140&amp;Timestamp=572720718.031147"
          selectedRepresentationIndex = "0"
          shouldTrackSuperviewWidth = "NO">
       </LoggerValueHistoryTimelineItem>
       <LoggerValueHistoryTimelineItem
-         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=21&amp;CharacterRangeLoc=6301&amp;EndingColumnNumber=0&amp;EndingLineNumber=279&amp;StartingColumnNumber=21&amp;StartingLineNumber=278&amp;Timestamp=571951964.504768"
+         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=21&amp;CharacterRangeLoc=6301&amp;EndingColumnNumber=0&amp;EndingLineNumber=279&amp;StartingColumnNumber=21&amp;StartingLineNumber=278&amp;Timestamp=572720718.031333"
          selectedRepresentationIndex = "0"
          shouldTrackSuperviewWidth = "NO">
       </LoggerValueHistoryTimelineItem>
       <LoggerValueHistoryTimelineItem
-         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=0&amp;CharacterRangeLoc=11540&amp;EndingColumnNumber=0&amp;EndingLineNumber=495&amp;StartingColumnNumber=0&amp;StartingLineNumber=495&amp;Timestamp=571951964.504926"
+         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=0&amp;CharacterRangeLoc=11540&amp;EndingColumnNumber=0&amp;EndingLineNumber=495&amp;StartingColumnNumber=0&amp;StartingLineNumber=495&amp;Timestamp=572720718.034016"
          selectedRepresentationIndex = "0"
+         shouldTrackSuperviewWidth = "NO">
+      </LoggerValueHistoryTimelineItem>
+      <LoggerValueHistoryTimelineItem
+         documentLocation = "file:///Users/malmam1/Documents/Development/cs_basics/Problems/practice.playground#CharacterRangeLen=1&amp;CharacterRangeLoc=18052&amp;EndingColumnNumber=22&amp;EndingLineNumber=773&amp;StartingColumnNumber=21&amp;StartingLineNumber=773&amp;Timestamp=572720718.0342031"
+         selectedRepresentationIndex = "2"
          shouldTrackSuperviewWidth = "NO">
       </LoggerValueHistoryTimelineItem>
    </TimelineItems>

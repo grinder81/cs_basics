@@ -730,6 +730,7 @@ func trap(_ height: [Int]) -> Int {
     var trapArea = 0
     var index = 0
     
+    /*
     /// Without stack
     var l = 0
     var r = n - 1
@@ -753,9 +754,9 @@ func trap(_ height: [Int]) -> Int {
             r -= 1
         }
     }
+ */
     
     /// With Stack
-    /*
     var s: [Int] = []
     
     while index < n {
@@ -776,12 +777,11 @@ func trap(_ height: [Int]) -> Int {
             }
         }
     }
-    */
     
     return trapArea
 }
 
-let t = trap([2, 1, 2])
+let t = trap([3, 2, 1, 0, 4])
 print(t)
 
 

@@ -47,6 +47,6 @@ func mergeSort(_ array: inout[Int], low: Int, high: Int) {
     }
 }
 
-var array = [3, 2, 1, 4, 5, 6, 7]
+var array = [3, 2, 1, 4, 5]
 mergeSort(&array, low: 0, high: array.count - 1)
 print(array)

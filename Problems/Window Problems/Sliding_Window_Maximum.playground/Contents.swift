@@ -1,7 +1,7 @@
 import UIKit
 
 // https://leetcode.com/problems/sliding-window-maximum/
-
+// O((n - k + 1))
 func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
     guard nums.count > 0 else { return [] }
     
@@ -14,7 +14,6 @@ func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
         }
         deQueue.append(index)
     }
-    print(deQueue)
     for index in k..<n {
         output.append(nums[deQueue.first!])
         
@@ -34,8 +33,10 @@ func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
     return output
 }
 
-maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3)
+//maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3)
+maxSlidingWindow([10, 9, 8, 7, 6, 5, 4, 3], 3)
 
+// O(n * k)
 func maxSlidingWindowSimple(_ nums: [Int], _ k: Int) -> [Int] {
     guard nums.count > 0 else {
         return []
@@ -78,5 +79,7 @@ func maxSlidingWindowSimple(_ nums: [Int], _ k: Int) -> [Int] {
     return output
 }
 
-maxSlidingWindowSimple([1,3,-1,-3,5,3,6,7], 3)
+//maxSlidingWindowSimple([1,3,-1,-3,5,3,6,7], 3)
+maxSlidingWindowSimple([10, 9, 8, 7, 6, 5, 4, 3], 3)
+
 //maxSlidingWindowSimple([1,-1], 1)
