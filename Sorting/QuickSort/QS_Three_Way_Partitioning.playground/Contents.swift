@@ -56,3 +56,10 @@ var array = [1, 1, 1, 1, 1, 1, 1]
 quickSort(&array, p: 0, r: array.count - 1)
 
 print(array)
+
+
+
+
+
+
+

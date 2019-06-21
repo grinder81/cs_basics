@@ -11,7 +11,7 @@ import Foundation
 // Searching isn't a top priority in a heap since the purpose of a heap
 // is to put the largest (or smallest) node at the front and to allow relatively fast inserts and deletes.
 class Heap {
-    var i: Int8
+    var i: Int8 = 0
     
     private var data: [Int] = []
     private(set) var size: Int = 0
